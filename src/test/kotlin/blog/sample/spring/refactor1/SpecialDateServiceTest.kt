@@ -27,8 +27,25 @@ internal class SpecialDateServiceTest(
 
         Mockito.`when`(specialDateRepository.findAll()).thenReturn(specialDays)
 
-        specialDateService = SpecialDateService(specialDateRepository)
+        // 실제론 컨테이거나 뜨는 과정에서 초기화 될 것이지만, 테스트에서는 강제로 수행
+        val specialDateChecker = SpecialDateChecker(specialDateRepository)
+//        specialDateService = SpecialDateService(specialDateRepository)
     }
+
+    @Test
+    @DisplayName("입력한 날짜가 특별한 날 일 경우 특별한 날이 아닌 날까지 민다")
+    fun push2() {
+        val date = LocalDate.of(2022, 6, 6)
+        assertThat(NormalDayGenerator.push(date).isEqual(LocalDate.of(2022, 6, 8))).isTrue
+    }
+
+    @Test
+    @DisplayName("입력한 날짜가 특별한 날 일 경우 특별한 날이 아닌 날까지 당긴다")
+    fun pull2() {
+        val date = LocalDate.of(2022, 6, 7)
+        assertThat(NormalDayGenerator.pull(date).isEqual(LocalDate.of(2022, 6, 5))).isTrue
+    }
+
 
     @Test
     @DisplayName("입력한 날짜가 특별한 날인지 아닌지 여부를 반환")
@@ -38,18 +55,48 @@ internal class SpecialDateServiceTest(
             { assertTrue(specialDateService.isSpecialDay(LocalDate.of(2022, 6, 6))) }
         )
     }
+//
+//
+//    @Test
+//    @DisplayName("입력한 날짜가 특별한 날 일 경우 특별한 날이 아닌 날까지 민다")
+//    fun push() {
+//        val date = LocalDate.of(2022, 6, 6)
+//        assertThat(specialDateService.push(date).isEqual(LocalDate.of(2022, 6, 8))).isTrue
+//    }
+//
+//    @Test
+//    @DisplayName("입력한 날짜가 특별한 날 일 경우 특별한 날이 아닌 날까지 당긴다")
+//    fun pull() {
+//        val date = LocalDate.of(2022, 6, 7)
+//        assertThat(specialDateService.pull(date).isEqual(LocalDate.of(2022, 6, 5))).isTrue
+//    }
+//
+//
+//
+//    @Test
+//    @DisplayName("입력한 날짜가 특별한 날인지 아닌지 여부를 반환")
+//    fun isSpecialDayBySpecialDateChecker() {
+//        // 실제론 컨테이거나 뜨는 과정에서 초기화 될 것이지만, 테스트에서는 강제로 수행
+//        val specialDateChecker = SpecialDateChecker(specialDateRepository)
+//
+//        assertAll(
+//            { assertFalse(SpecialDateChecker.isSpecialDay(LocalDate.of(2022, 6, 5))) },
+//            { assertTrue(SpecialDateChecker.isSpecialDay(LocalDate.of(2022, 6, 6))) }
+//        )
+//    }
+//
+//    @Test
+//    @DisplayName("입력한 날짜가 특별한 날 일 경우 특별한 날이 아닌 날까지 민다")
+//    fun push2() {
+//        val date = LocalDate.of(2022, 6, 6)
+//        assertThat(NormalDayGenerator.push(date).isEqual(LocalDate.of(2022, 6, 8))).isTrue
+//    }
+//
+//    @Test
+//    @DisplayName("입력한 날짜가 특별한 날 일 경우 특별한 날이 아닌 날까지 당긴다")
+//    fun pull2() {
+//        val date = LocalDate.of(2022, 6, 7)
+//        assertThat(NormalDayGenerator.pull(date).isEqual(LocalDate.of(2022, 6, 5))).isTrue
+//    }
 
-    @Test
-    @DisplayName("입력한 날짜가 특별한 날 일 경우 특별한 날이 아닌 날까지 민다")
-    fun push() {
-        val date = LocalDate.of(2022, 6, 6)
-        assertThat(specialDateService.push(date).isEqual(LocalDate.of(2022, 6, 8))).isTrue
-    }
-
-    @Test
-    @DisplayName("입력한 날짜가 특별한 날 일 경우 특별한 날이 아닌 날까지 당긴다")
-    fun pull() {
-        val date = LocalDate.of(2022, 6, 7)
-        assertThat(specialDateService.pull(date).isEqual(LocalDate.of(2022, 6, 5))).isTrue
-    }
 }
